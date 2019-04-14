@@ -11,6 +11,7 @@ import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import javax.net.ssl.*;
 
@@ -97,7 +98,7 @@ public class LoginTest_01 {
 
             //parse the document from response
             Document document = responsePostLogin.parse();
-            System.out.println(document);
+            //System.out.println(document);
 
             //get the cookies
             Map<String, String> mapLoggedInCookies = responsePostLogin.cookies();
@@ -106,6 +107,23 @@ public class LoginTest_01 {
              * For all the subsequent requests, you need to send
              * the mapLoggedInCookies containing cookies
              */
+
+            // 메인 페이지
+            Document adminPageDocument = Jsoup.connect("https://forest.skhu.ac.kr/Gate/UniMyMain.aspx")
+                    .referrer("https://forest.skhu.ac.kr/Gate/UniMyMain.aspx")
+                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36")
+                    .timeout(10 * 1000)
+                    .followRedirects(true)
+                    .cookies(mapLoggedInCookies) // 위에서 얻은 '로그인 된' 쿠키
+                    .get();
+
+            //System.out.println("HTTP Status Code2: " + adminPageDocument.statusCode());
+
+            //parse the document from response
+            //Element document2 = adminPageDocument.getAllElements();
+            System.out.println(adminPageDocument.title());
+
+
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
